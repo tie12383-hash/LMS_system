@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+
+# Виртуальное окружение
+venv/
+env/
+.venv/
+
+# Django
+*.log
+*.pot
+*.pyc
+local_settings.py
+db.sqlite3
+media/
+staticfiles/
+
+# PyCharm
+.idea/
+*.iml
+
+# Другие IDE
+.vscode/
+*.swp
+*.swo
+
+# Переменные окружения
+.env
+
+# Файлы ОС
+.DS_Store
+Thumbs.db
