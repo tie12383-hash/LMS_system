@@ -1,9 +1,8 @@
 from rest_framework import serializers
 from users.models import User, Payment
-from materials.serializers import CourseSerializer, LessonSerializer
+from materials.models import Course, Lesson
 
 class PaymentSerializer(serializers.ModelSerializer):
-    # Для вывода названий курса добавим поля
     course_title = serializers.CharField(source='course.title', read_only=True)
     lesson_title = serializers.CharField(source='lesson.title', read_only=True)
 
@@ -18,3 +17,26 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'email', 'phone', 'city', 'avatar', 'payments']
+
+class UserPublicSerializer(serializers.ModelSerializer):
+    """Для просмотра чужого профиля (без приватных полей)"""
+    class Meta:
+        model = User
+        fields = ['id', 'email', 'phone', 'city', 'avatar']
+
+class UserRegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['email', 'password', 'phone', 'city', 'avatar']
+
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            email=validated_data['email'],
+            password=validated_data['password'],
+            phone=validated_data.get('phone', ''),
+            city=validated_data.get('city', ''),
+            avatar=validated_data.get('avatar')
+        )
+        return user

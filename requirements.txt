@@ -5,3 +5,4 @@ pillow==12.1.1
 sqlparse==0.5.5
 tzdata==2025.3
 django-filter==25.2
+djangorestframework-simplejwt==25.0
