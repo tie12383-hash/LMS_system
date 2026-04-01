@@ -1,5 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from materials.models import Course, Lesson
+
+class Payment(models.Model):
+    """
+    Модель платежа.
+    """
+
+    user = models.ForeignKey(
+        'user',
+        on_delete=models.CASCADE,
+        related_name='payments',
+        verbose_name='Пользователь',
+        help_text='Пользователь, совершивший платеж'
+    )
 
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -57,14 +71,14 @@ class Payment(models.Model):
     )
     payment_date = models.DateTimeField(auto_now_add=True, verbose_name='Дата оплаты')
     course = models.ForeignKey(
-        'materials.Course',
+        Course,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         verbose_name='Оплаченный курс'
     )
     lesson = models.ForeignKey(
-        'materials.Lesson',
+        Lesson,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -83,6 +97,7 @@ class Payment(models.Model):
         ordering = ['-payment_date']
 
     def clean(self):
+        # Проверяем, что указан либо курс, либо урок (но не оба и не ни одного)
         if not self.course and not self.lesson:
             raise ValueError('Должен быть указан либо курс, либо урок')
         if self.course and self.lesson:
@@ -94,27 +109,3 @@ class Payment(models.Model):
 
     def __str__(self):
         return f'{self.user.email} - {self.course or self.lesson} - {self.amount}'
-
-
-class Subscription(models.Model):
-    user = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name='subscriptions',
-        verbose_name='Пользователь'
-    )
-    course = models.ForeignKey(
-        'materials.Course',
-        on_delete=models.CASCADE,
-        related_name='subscriptions',
-        verbose_name='Курс'
-    )
-    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата подписки')
-
-    class Meta:
-        unique_together = ('user', 'course')
-        verbose_name = 'Подписка'
-        verbose_name_plural = 'Подписки'
-
-    def __str__(self):
-        return f'{self.user.email} -> {self.course.title}'
