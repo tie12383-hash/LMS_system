@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'users',
     'materials',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -78,7 +79,10 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
@@ -87,6 +91,13 @@ SIMPLE_JWT = {
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': True,
     'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'LMS System API',
+    'DESCRIPTION': 'API для платформы онлайн-обучения',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 
 # Database
@@ -140,3 +151,7 @@ AUTH_USER_MODEL = 'users.User'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STRIPE_SECRET_KEY = 'sk_test_123'  # секретный ключ из Stripe Dashboard
+STRIPE_PUBLIC_KEY = 'pk_test_000'  # публичный ключ
+SITE_URL = 'http://localhost:8000'  # для редиректов

@@ -97,7 +97,7 @@ class Payment(models.Model):
         ordering = ['-payment_date']
 
     def clean(self):
-        # Проверяем, что указан либо курс, либо урок (но не оба и не ни одного)
+        # Проверяем, что указан либо курс, либо урок
         if not self.course and not self.lesson:
             raise ValueError('Должен быть указан либо курс, либо урок')
         if self.course and self.lesson:
@@ -109,3 +109,12 @@ class Payment(models.Model):
 
     def __str__(self):
         return f'{self.user.email} - {self.course or self.lesson} - {self.amount}'
+    stripe_product_id = models.CharField(max_length=255, blank=True, null=True)
+    stripe_price_id = models.CharField(max_length=255, blank=True, null=True)
+    stripe_session_id = models.CharField(max_length=255, blank=True, null=True)
+    payment_status = models.CharField(
+        max_length=20,
+        choices=[('pending', 'Ожидание'), ('succeeded', 'Успешно'), ('failed', 'Ошибка')],
+        default='pending'
+    )
+    checkout_url = models.URLField(blank=True, null=True)
