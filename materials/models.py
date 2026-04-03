@@ -21,6 +21,8 @@ class Course(models.Model):
     def __str__(self):
         return self.title
 
+    last_notification_sent = models.DateTimeField(null=True, blank=True)
+
 
 class Lesson(models.Model):
     title = models.CharField(max_length=200, verbose_name='Название')
