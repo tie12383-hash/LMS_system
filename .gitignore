@@ -2,36 +2,22 @@
 __pycache__/
 *.py[cod]
 *.so
-*.egg-info/
-dist/
-build/
-
-# Виртуальное окружение
-venv/
+.Python
 env/
+venv/
 .venv/
+.env
+*.sqlite3
 
 # Django
-*.log
-*.pot
-*.pyc
-local_settings.py
-db.sqlite3
 media/
+static/
 staticfiles/
+*.log
 
-# PyCharm
+# IDE
 .idea/
-*.iml
-
-# Другие IDE
 .vscode/
-*.swp
-*.swo
 
-# Переменные окружения
-.env
-
-# Файлы ОС
-.DS_Store
-Thumbs.db
+# Docker
+docker-compose.override.yml
