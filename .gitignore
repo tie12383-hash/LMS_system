@@ -21,3 +21,4 @@ staticfiles/
 
 # Docker
 docker-compose.override.yml
+".idea/" 
