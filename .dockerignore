@@ -1,0 +1,32 @@
+# Python
+__pycache__
+*.py[cod]
+*.so
+.Python
+env/
+venv/
+.venv/
+.env
+*.sqlite3
+
+# Django
+media/
+static/
+staticfiles/
+*.log
+
+# IDE
+.idea/
+.vscode/
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# CI/CD
+.github/
