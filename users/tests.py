@@ -8,6 +8,7 @@ from users.models import Subscription
 
 User = get_user_model()
 
+
 class SubscriptionTests(TestCase):
     def setUp(self):
         self.client = APIClient()

@@ -11,14 +11,15 @@ from users.serializers import (
     UserPublicSerializer,
     PaymentSerializer
 )
-from users.permissions import IsOwner
 from materials.models import Course
 from users.services import create_stripe_product, create_stripe_price, create_checkout_session
 from django.conf import settings
 
+
 class UserRegistrationView(generics.CreateAPIView):
     serializer_class = UserRegistrationSerializer
     permission_classes = [permissions.AllowAny]
+
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
@@ -29,6 +30,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
             return UserSerializer
         return UserPublicSerializer
 
+
 class PaymentViewSet(viewsets.ModelViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
@@ -37,6 +39,7 @@ class PaymentViewSet(viewsets.ModelViewSet):
     ordering_fields = ['payment_date']
     ordering = ['-payment_date']
     permission_classes = [permissions.IsAuthenticated]
+
 
 class CreatePaymentView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -74,6 +77,7 @@ class CreatePaymentView(APIView):
             'checkout_url': session.url,
             'message': 'Ссылка на оплату создана'
         }, status=status.HTTP_201_CREATED)
+
 
 class CheckPaymentStatusView(APIView):
     permission_classes = [permissions.IsAuthenticated]

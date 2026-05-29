@@ -1,7 +1,8 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from users.views import UserRegistrationView, UserProfileView, PaymentViewSet, CreatePaymentView, CheckPaymentStatusView
+from users.views import (UserRegistrationView,
+                         UserProfileView, PaymentViewSet, CreatePaymentView, CheckPaymentStatusView)
 
 router = DefaultRouter()
 router.register(r'payments', PaymentViewSet, basename='payment')

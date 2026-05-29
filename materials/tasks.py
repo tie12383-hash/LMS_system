@@ -6,6 +6,7 @@ from datetime import timedelta
 from django.utils import timezone
 from materials.models import Course
 
+
 @shared_task
 def send_course_update_notification(course_id):
     """Отправляет email всем подписчикам курса о его обновлении."""

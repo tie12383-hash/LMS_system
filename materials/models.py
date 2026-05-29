@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+
 class Course(models.Model):
     title = models.CharField(max_length=200, verbose_name='Название')
     preview = models.ImageField(upload_to='courses/previews/', blank=True, null=True, verbose_name='Превью')
