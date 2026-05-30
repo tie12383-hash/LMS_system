@@ -1,19 +1,28 @@
 from rest_framework import viewsets, generics
 from materials.models import Course, Lesson
 from materials.serializers import CourseSerializer, LessonSerializer
-from materials.paginators import CoursePaginator, LessonPaginator
-from materials.tasks import send_course_update_notification
+from materials.paginators import LessonPaginator
+from rest_framework import permissions
+from users.permissions import IsModerator, IsOwner
 
 
 class CourseViewSet(viewsets.ModelViewSet):
-    pagination_class = CoursePaginator
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
-    def perform_update(self, serializer):
-        course = serializer.save()
-        # Запускаем задачу асинхронно через 5 секунд, чтобы дать время завершить транзакцию
-        send_course_update_notification.apply_async((course.id,), countdown=5)
+    def get_permissions(self):
+        if self.action == 'create':
+            self.permission_classes = [permissions.IsAuthenticated, ~IsModerator, IsOwner]
+        elif self.action == 'destroy':
+            self.permission_classes = [permissions.IsAuthenticated, IsOwner]
+        elif self.action in ['update', 'partial_update']:
+            self.permission_classes = [permissions.IsAuthenticated, IsModerator | IsOwner]
+        else:
+            self.permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in self.permission_classes]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class LessonListCreateView(generics.ListCreateAPIView):

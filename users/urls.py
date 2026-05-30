@@ -1,6 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from users.views import SubscriptionView
 from users.views import (UserRegistrationView,
                          UserProfileView, PaymentViewSet, CreatePaymentView, CheckPaymentStatusView)
 
@@ -14,5 +15,6 @@ urlpatterns = [
     path('users/<int:pk>/', UserProfileView.as_view(), name='user-profile'),
     path('payments/create/', CreatePaymentView.as_view(), name='create-payment'),
     path('payments/<int:payment_id>/status/', CheckPaymentStatusView.as_view(), name='payment-status'),
+    path('subscribe/', SubscriptionView.as_view(), name='subscribe'),
     path('', include(router.urls)),
 ]

@@ -1,10 +1,9 @@
-from rest_framework import generics, permissions, viewsets, filters
-from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, permissions, viewsets, filters, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 from django.shortcuts import get_object_or_404
-from users.models import User, Payment
+from django_filters.rest_framework import DjangoFilterBackend
+from users.models import User, Payment, Subscription
 from users.serializers import (
     UserRegistrationSerializer,
     UserSerializer,
@@ -92,3 +91,20 @@ class CheckPaymentStatusView(APIView):
             return Response({'status': 'succeeded'})
         else:
             return Response({'status': 'pending'})
+
+
+class SubscriptionView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+        course_id = request.data.get('course_id')
+        if not course_id:
+            return Response({'error': 'course_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+        course = get_object_or_404(Course, id=course_id)
+        subscription, created = Subscription.objects.get_or_create(user=user, course=course)
+        if not created:
+            subscription.delete()
+            return Response({'message': 'подписка удалена'})
+        else:
+            return Response({'message': 'подписка добавлена'})
