@@ -15,11 +15,10 @@ while ! nc -z $REDIS_HOST $REDIS_PORT; do
 done
 echo "Redis started"
 
-# Применяем миграции
+# Миграции
 python manage.py migrate --noinput
 
-# Собираем статику
+# Сбор статики
 python manage.py collectstatic --noinput
 
-# Запускаем команду, переданную в CMD
 exec "$@"
